@@ -295,6 +295,39 @@ recomputing a number the pipeline already computed:
 7. **Data & Insights (EDA)** — the mandatory EDA figures (E1, E2, E5–E9, E11) with the matching
    `insights.md` narrative, and EDA table downloads.
 
+### Deploying to Streamlit Community Cloud
+
+The app is read-only over committed artifacts, so a deployment needs no data download, no pipeline
+run and no API key. Point Community Cloud at this repository with:
+
+| Setting | Value |
+|---|---|
+| Branch | `main` |
+| Main file path | `src/app/Home.py` |
+| Python version (*Advanced settings*) | **3.11** |
+| Secrets | none |
+
+The main file must stay inside `src/app/` — Streamlit discovers the other six screens from the
+`pages/` directory next to the entry point.
+
+Cloud installs `requirements.txt` and nothing else, which is why that file ends with `-e .`: it is
+what puts `src/` on the import path, exactly as the local `pip install -e .` step does. Because
+`pyproject.toml` pins `requires-python = ">=3.11,<3.12"`, that install fails on any other
+interpreter — selecting Python 3.11 in *Advanced settings* is required, not cosmetic.
+
+Everything the app opens is committed: `config/`, `data/processed/clean_data.csv`, and the
+`artifacts/` tree (`run_log.json`, `validation_report.json`, `forecasts/*.csv`, `contracts/`,
+`reports/` with its `eda_tables/`, `evaluation_tables/` and `figures/`). The app loads no
+`.joblib` model — the champion's predictions are read from `artifacts/forecasts/`.
+
+Two known differences from a local run: `logs/` is git-ignored, so the run-history list on
+*Pipeline & Data Quality* is empty on Cloud; and `requirements.txt` installs the full agent stack
+(`crewai`, `crewai-tools`, `onnxruntime` and their transitive dependencies) which the app itself
+never imports. If that install ever exceeds the Community Cloud resource limit, deploy from a
+branch whose `requirements.txt` keeps only the app's runtime set — numpy, pandas, scikit-learn,
+pyarrow, matplotlib, seaborn, PyYAML, pydantic, joblib, streamlit, `-e .` — and leave `main`'s
+pinned file, which CI installs, unchanged.
+
 ---
 
 ## 8. Configuration
