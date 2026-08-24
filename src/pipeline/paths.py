@@ -61,6 +61,9 @@ SIGMA_TABLE: Path = FORECASTS_DIR / "sigma_table.csv"
 INVENTORY_KPIS: Path = FORECASTS_DIR / "inventory_kpis.csv"
 HOLDOUT_SIMULATION_ROWS: Path = FORECASTS_DIR / "holdout_simulation_rows.csv"
 QUARTERLY_FORECAST: Path = FORECASTS_DIR / "quarterly_forecast.csv"
+# US-40: one row per product x horizon, and the month/quarter stocking view built from it.
+MULTI_HORIZON_PLAN: Path = FORECASTS_DIR / "multi_horizon_plan.csv"
+PERIOD_PLAN: Path = FORECASTS_DIR / "period_plan.csv"
 
 # --- reports ---------------------------------------------------------------
 EDA_REPORT: Path = REPORTS_DIR / "eda_report.html"            # required artifact

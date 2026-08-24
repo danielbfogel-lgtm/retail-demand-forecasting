@@ -377,14 +377,29 @@ No separate quarterly model. Quarter forecast = Σ of the three genuine one-step
 
 # 32. Quarterly Limitation
 
-The MVP cannot forecast all three months of a quarter at the start of the quarter (would require direct multi-horizon or recursive forecasting — v2). Quarterly aggregation is for back-testing, reporting and rolling aggregation of monthly forecasts.
+The quarterly aggregation of §31 cannot forecast all three months of a quarter at the start of the quarter: each of its three monthly forecasts is made one month before its own target. Quarterly aggregation is for back-testing, reporting and rolling aggregation of monthly forecasts.
+
+# 32A. Multi-Horizon Forecasting (approved extension)
+
+The v2 extension anticipated in §32 is implemented, as a *separate* module (`pipeline.multi_horizon`), leaving §31 unchanged. It runs the same one-step-ahead champion **recursively**: the forecast for `origin + 1` is written back into the panel as that month's units, the §17 features are rebuilt from the amended panel, and the same model predicts `origin + 2`, up to `model_config.yaml → multi_horizon.max_horizon` months.
+
+Rules, all enforced by code and tests:
+
+1. **No new model.** There is no multi-horizon estimator. The champion selected by the §20 gates is the only model involved, and horizon 1 reproduces the §23 operational forecast exactly.
+2. **Each horizon carries its own σ.** Horizon `h` is scored against `origin + h` in a recursive back-test over the §22 rolling origins, and its robust σ (§26) comes from those residuals alone — never from the one-step-ahead σ. A horizon-3 forecast compounds three predictions, so its safety stock is measurably wider, and the artifact shows it.
+3. **The partial month stays unreachable.** From the first forecast month onward the panel's `units_sold` is the model's forecast, so December 2011's truncated actuals never enter a feature window at any horizon (§16, §21). Proved by perturbation, not asserted.
+4. **Two features are carried, not predicted.** `invoice_count_lag_1` and `avg_unit_price_lag_1` describe transactions that have not happened in a forecast month. They hold their last observed value (`multi_horizon.carry_forward_columns`) — a stated assumption, listed in §50.
+5. **A quarter is a sum of months, never a quarterly policy.** With `lead_time_months = 1` the stock level is re-set monthly, so a quarter's Recommended Target Inventory is the sum of its three monthly targets and its safety stock is held once per month. No quarterly σ is estimated: the back-test yields too few complete quarters per product to support one.
+6. **Accuracy degrades with horizon, and is not hidden.** Horizons beyond the first are not scored by the §20 champion gates and never influence champion selection.
+
+Artifacts: `artifacts/forecasts/multi_horizon_plan.csv` (per product × horizon) and `artifacts/forecasts/period_plan.csv` (per product × period: the hold-out months, the forecast months and the calendar quarters built from them). Both are read by Screen 2 (§33.2).
 
 ---
 
 # 33. Product Screens (Streamlit)
 
 1. **Executive Dashboard** — active products, total next-month forecast, total target inventory, champion wMAPE and Bias, hold-out fill rate, stockout and excess units, run id / timestamp / data hash.
-2. **Product Forecasts** — table: Product, Description, Last Month, 3M Avg, Forecast, Safety Stock, Target Inventory, Sigma source, ABC; filters (StockCode / description search, ABC, high uncertainty, forecast > 0); **Download CSV**.
+2. **Product Forecasts** — table: Product, Description, Last Month, 3M Avg, Forecast, Safety Stock, Target Inventory, Sigma source, ABC; filters (StockCode / description search, ABC, high uncertainty, forecast > 0); **Download CSV**. Plus a period view (§32A): pick any month or quarter the pipeline covers — a hold-out month with its actual, or a forecast month/quarter — and see the stocking requirement for it.
 3. **Product Detail** — monthly chart (actual, historical back-test forecasts, next-month forecast with ± z·σ band); inventory recommendation block; metadata (age, months since last sale, ABC, active status).
 4. **Model Evaluation** — B1, B2, M1, M2, M3, M4: wMAPE, Bias, MAE, RMSE; by month; by ABC; actual-vs-forecast; champion decision trace (which gate each candidate passed).
 5. **Inventory Policy Evaluation** — forecast-only vs. forecast + robust safety stock, ML vs. baseline, z slider; fill rate, stockout units, excess units, stockout SKU-month rate.

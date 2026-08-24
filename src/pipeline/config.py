@@ -198,6 +198,23 @@ class BacktestConfig(_Base):
         return self
 
 
+class MultiHorizonConfig(_Base):
+    """Recursive multi-month forecasting beyond the one-step-ahead operational month (§32).
+
+    The model is one-step-ahead by construction: horizons past the first are produced by feeding
+    each forecast back into the panel as that month's units and rebuilding the features, so the
+    accuracy of horizon ``h`` compounds the error of every horizon before it. ``max_horizon`` is
+    therefore a deliberate ceiling, not an arbitrary limit — raise it only alongside the
+    horizon-specific sigma that :mod:`pipeline.multi_horizon` measures for every horizon it emits.
+    """
+
+    max_horizon: int = Field(gt=0)
+    #: Panel columns held at their last observed value in a forecast month. ``units_sold`` is the
+    #: forecast itself; these two feed ``invoice_count_lag_1`` / ``avg_unit_price_lag_1``, which no
+    #: demand model can predict, so they are carried rather than invented.
+    carry_forward_columns: list[str] = Field(min_length=1)
+
+
 class ModelSpec(_Base):
     """One forecasting candidate (PRD §19). Baselines carry no hyper-parameters."""
 
@@ -311,6 +328,7 @@ class ModelConfig(_Base):
     features: list[str] = Field(min_length=1)
     split: SplitConfig
     backtest: BacktestConfig
+    multi_horizon: MultiHorizonConfig
     models: dict[str, ModelSpec]
     tuning: TuningConfig
     champion_gates: ChampionGates

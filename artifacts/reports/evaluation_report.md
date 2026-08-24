@@ -1,6 +1,6 @@
 # Evaluation Report — Retail Demand Forecasting
 
-*Run:* `20260818T095823Z-fdcd09` · *Generated:* 2026-08-18T09:58:24.060569+00:00 · *Data hash:* `not recorded in this run`
+*Run:* `20260824T181001Z-27103c` · *Generated:* 2026-08-24T18:16:09.476192+00:00 · *Data hash:* `bcbe73b35f5b7babf197fb0cb983a11f5d9ff929078d4aa53d171b1f2df2e980`
 
 *Configuration:* active-product window k = 6 · seed 42 · train targets
 2010-03..2011-05 · validation targets
@@ -22,10 +22,10 @@ may be enriched by the LLM agent in LLM mode; the same guard checks both version
 | B1_last_month | 55.7 % | -8.5 % | 85.1 | 250.3 | 19,968 | 100.0 % | 0.0 % | -1.0 % | -1.8 % | False |  |
 | B2_ma3 | 54.7 % | -17.4 % | 83.6 | 251.1 | 19,968 | 100.0 % | 0.0 % | 0.0 % | 0.0 % | False |  |
 | B3_seasonal_naive | 89.6 % | 35.0 % | 118.6 | 359.8 | 16,529 | 82.8 % | 0.0 % | -34.8 % | -63.7 % | False | B3 (seasonal naive) has no observed month t-12 for every product; metrics computed only on rows where a seasonal forecast exists (see coverage_share). |
-| M1_linear | 56.0 % | -18.1 % | 85.6 | 257.8 | 19,968 | 100.0 % | 13.9 % | -1.3 % | -2.4 % | False |  |
-| M2_gbm_poisson | 52.6 % | 0.7 % | 80.3 | 237.0 | 19,968 | 100.0 % | 0.0 % | 2.1 % | 3.9 % | False |  |
-| M3_gbm_squared | 54.3 % | 1.5 % | 83.0 | 230.9 | 19,968 | 100.0 % | 0.0 % | 0.4 % | 0.7 % | False |  |
-| M4_gbm_absolute | 50.2 % | -25.8 % | 76.6 | 257.1 | 19,968 | 100.0 % | 0.2 % | 4.6 % | 8.4 % | False |  |
+| M1_linear | 55.9 % | -18.2 % | 85.3 | 257.4 | 19,968 | 100.0 % | 14.4 % | -1.1 % | -2.1 % | False |  |
+| M2_gbm_poisson | 52.6 % | 0.6 % | 80.3 | 237.4 | 19,968 | 100.0 % | 0.0 % | 2.2 % | 3.9 % | False |  |
+| M3_gbm_squared | 54.4 % | 1.6 % | 83.1 | 231.4 | 19,968 | 100.0 % | 0.0 % | 0.3 % | 0.6 % | False |  |
+| M4_gbm_absolute | 49.9 % | -25.2 % | 76.2 | 255.8 | 19,968 | 100.0 % | 0.2 % | 4.8 % | 8.8 % | False |  |
 
 B3 (seasonal naive) has no observed month t-12 for every product; its metrics are computed only on
 rows where a seasonal forecast exists — see the coverage column above.
@@ -56,30 +56,30 @@ ABC computed on the training window through 2011-05.
 | B3_seasonal_naive | 2011-09 | 92.3 % | 34.6 % | 132.0 | 429.4 | 2,787 |
 | B3_seasonal_naive | 2011-10 | 88.9 % | 37.3 % | 134.6 | 363.8 | 2,817 |
 | B3_seasonal_naive | 2011-11 | 78.9 % | 32.7 % | 150.1 | 450.1 | 2,776 |
-| M1_linear | 2011-06 | 59.1 % | -5.5 % | 65.1 | 163.7 | 3,284 |
-| M1_linear | 2011-07 | 53.0 % | -11.7 % | 62.3 | 160.1 | 3,289 |
-| M1_linear | 2011-08 | 56.7 % | -6.1 % | 70.6 | 187.0 | 3,310 |
-| M1_linear | 2011-09 | 55.9 % | -26.3 % | 92.3 | 229.6 | 3,324 |
-| M1_linear | 2011-10 | 57.7 % | -21.7 % | 102.2 | 289.4 | 3,373 |
-| M1_linear | 2011-11 | 54.6 % | -25.4 % | 119.4 | 414.1 | 3,388 |
-| M2_gbm_poisson | 2011-06 | 56.7 % | 9.4 % | 62.5 | 173.8 | 3,284 |
-| M2_gbm_poisson | 2011-07 | 48.4 % | -1.9 % | 56.9 | 150.2 | 3,289 |
-| M2_gbm_poisson | 2011-08 | 56.7 % | 9.2 % | 70.6 | 185.7 | 3,310 |
-| M2_gbm_poisson | 2011-09 | 52.0 % | -11.8 % | 85.9 | 217.5 | 3,324 |
-| M2_gbm_poisson | 2011-10 | 57.0 % | 6.8 % | 101.1 | 270.4 | 3,373 |
-| M2_gbm_poisson | 2011-11 | 47.3 % | -2.6 % | 103.6 | 356.5 | 3,388 |
-| M3_gbm_squared | 2011-06 | 57.5 % | 8.5 % | 63.4 | 167.7 | 3,284 |
-| M3_gbm_squared | 2011-07 | 50.2 % | 3.2 % | 59.1 | 147.4 | 3,289 |
-| M3_gbm_squared | 2011-08 | 58.9 % | 11.2 % | 73.3 | 190.1 | 3,310 |
-| M3_gbm_squared | 2011-09 | 54.8 % | -10.1 % | 90.5 | 219.7 | 3,324 |
-| M3_gbm_squared | 2011-10 | 57.8 % | 5.1 % | 102.4 | 265.6 | 3,373 |
-| M3_gbm_squared | 2011-11 | 49.2 % | -2.5 % | 107.7 | 335.9 | 3,388 |
-| M4_gbm_absolute | 2011-06 | 50.5 % | -20.5 % | 55.6 | 154.8 | 3,284 |
-| M4_gbm_absolute | 2011-07 | 46.7 % | -22.0 % | 54.9 | 158.6 | 3,289 |
-| M4_gbm_absolute | 2011-08 | 48.6 % | -23.2 % | 60.6 | 190.0 | 3,310 |
-| M4_gbm_absolute | 2011-09 | 52.7 % | -35.7 % | 87.1 | 233.9 | 3,324 |
-| M4_gbm_absolute | 2011-10 | 51.9 % | -20.8 % | 92.0 | 281.6 | 3,373 |
-| M4_gbm_absolute | 2011-11 | 49.3 % | -28.4 % | 108.0 | 417.1 | 3,388 |
+| M1_linear | 2011-06 | 59.0 % | -5.5 % | 65.0 | 163.8 | 3,284 |
+| M1_linear | 2011-07 | 52.8 % | -11.8 % | 62.1 | 159.9 | 3,289 |
+| M1_linear | 2011-08 | 56.4 % | -6.2 % | 70.2 | 186.6 | 3,310 |
+| M1_linear | 2011-09 | 55.7 % | -26.4 % | 92.0 | 229.3 | 3,324 |
+| M1_linear | 2011-10 | 57.6 % | -21.7 % | 102.0 | 289.1 | 3,373 |
+| M1_linear | 2011-11 | 54.4 % | -25.3 % | 119.1 | 413.4 | 3,388 |
+| M2_gbm_poisson | 2011-06 | 56.7 % | 9.3 % | 62.6 | 173.9 | 3,284 |
+| M2_gbm_poisson | 2011-07 | 48.1 % | -2.4 % | 56.6 | 150.1 | 3,289 |
+| M2_gbm_poisson | 2011-08 | 57.2 % | 10.3 % | 71.3 | 187.6 | 3,310 |
+| M2_gbm_poisson | 2011-09 | 52.0 % | -11.6 % | 85.9 | 217.4 | 3,324 |
+| M2_gbm_poisson | 2011-10 | 56.9 % | 6.4 % | 100.9 | 270.8 | 3,373 |
+| M2_gbm_poisson | 2011-11 | 47.2 % | -3.0 % | 103.4 | 356.7 | 3,388 |
+| M3_gbm_squared | 2011-06 | 57.6 % | 8.4 % | 63.5 | 168.8 | 3,284 |
+| M3_gbm_squared | 2011-07 | 50.3 % | 3.6 % | 59.2 | 147.5 | 3,289 |
+| M3_gbm_squared | 2011-08 | 58.7 % | 11.1 % | 73.0 | 189.4 | 3,310 |
+| M3_gbm_squared | 2011-09 | 54.8 % | -10.4 % | 90.5 | 220.1 | 3,324 |
+| M3_gbm_squared | 2011-10 | 57.8 % | 5.0 % | 102.4 | 266.1 | 3,373 |
+| M3_gbm_squared | 2011-11 | 49.6 % | -1.9 % | 108.5 | 337.4 | 3,388 |
+| M4_gbm_absolute | 2011-06 | 50.2 % | -19.7 % | 55.3 | 153.9 | 3,284 |
+| M4_gbm_absolute | 2011-07 | 46.6 % | -21.9 % | 54.8 | 158.3 | 3,289 |
+| M4_gbm_absolute | 2011-08 | 48.4 % | -22.3 % | 60.2 | 187.4 | 3,310 |
+| M4_gbm_absolute | 2011-09 | 52.5 % | -35.0 % | 86.7 | 232.8 | 3,324 |
+| M4_gbm_absolute | 2011-10 | 51.9 % | -20.3 % | 92.1 | 280.1 | 3,373 |
+| M4_gbm_absolute | 2011-11 | 48.9 % | -27.8 % | 107.0 | 415.5 | 3,388 |
 
 ### By ABC group (training-window ABC)
 
@@ -94,18 +94,18 @@ ABC computed on the training window through 2011-05.
 | B3_seasonal_naive | A | 75.8 % | 38.9 % | 250.1 | 546.6 | 4,771 |
 | B3_seasonal_naive | B | 123.3 % | 42.0 % | 107.7 | 342.1 | 4,825 |
 | B3_seasonal_naive | C | 128.2 % | -11.6 % | 35.8 | 146.9 | 6,933 |
-| M1_linear | A | 46.2 % | -15.8 % | 153.6 | 366.5 | 5,271 |
-| M1_linear | B | 62.8 % | -26.6 % | 68.4 | 262.6 | 5,658 |
-| M1_linear | C | 75.1 % | -16.5 % | 56.7 | 159.0 | 9,039 |
-| M2_gbm_poisson | A | 45.9 % | 0.6 % | 152.5 | 350.1 | 5,271 |
-| M2_gbm_poisson | B | 59.3 % | -4.2 % | 64.6 | 232.5 | 5,658 |
-| M2_gbm_poisson | C | 63.7 % | 5.4 % | 48.0 | 137.1 | 9,039 |
-| M3_gbm_squared | A | 46.0 % | 0.6 % | 152.9 | 341.4 | 5,271 |
-| M3_gbm_squared | B | 61.9 % | -3.9 % | 67.4 | 219.9 | 5,658 |
-| M3_gbm_squared | C | 68.9 % | 8.7 % | 51.9 | 139.7 | 9,039 |
-| M4_gbm_absolute | A | 45.0 % | -22.3 % | 149.5 | 381.4 | 5,271 |
-| M4_gbm_absolute | B | 57.2 % | -32.0 % | 62.2 | 253.3 | 5,658 |
-| M4_gbm_absolute | C | 57.1 % | -29.2 % | 43.1 | 145.1 | 9,039 |
+| M1_linear | A | 46.2 % | -15.5 % | 153.5 | 365.9 | 5,271 |
+| M1_linear | B | 62.6 % | -26.9 % | 68.2 | 262.4 | 5,658 |
+| M1_linear | C | 74.7 % | -17.0 % | 56.3 | 158.9 | 9,039 |
+| M2_gbm_poisson | A | 45.8 % | 0.4 % | 152.3 | 350.1 | 5,271 |
+| M2_gbm_poisson | B | 59.5 % | -4.2 % | 64.8 | 233.4 | 5,658 |
+| M2_gbm_poisson | C | 63.7 % | 5.5 % | 48.1 | 137.5 | 9,039 |
+| M3_gbm_squared | A | 46.2 % | 0.7 % | 153.4 | 342.5 | 5,271 |
+| M3_gbm_squared | B | 61.8 % | -3.9 % | 67.3 | 220.5 | 5,658 |
+| M3_gbm_squared | C | 68.9 % | 8.8 % | 51.9 | 139.6 | 9,039 |
+| M4_gbm_absolute | A | 44.8 % | -21.2 % | 148.7 | 377.7 | 5,271 |
+| M4_gbm_absolute | B | 57.0 % | -31.9 % | 62.1 | 254.0 | 5,658 |
+| M4_gbm_absolute | C | 56.8 % | -29.4 % | 42.9 | 144.6 | 9,039 |
 
 ## Champion decision trace
 
@@ -123,10 +123,10 @@ Post-hoc bias correction is out of scope for this MVP and is not applied anywher
 | B1_last_month | 55.7 % | -8.5 % | True | none | 3 | — | — |
 | B2_ma3 | 54.7 % | -17.4 % | False | 2011-09, 2011-11 | — | — | — |
 | B3_seasonal_naive | 89.6 % | 35.0 % | False | 2011-06, 2011-08, 2011-09, 2011-10, 2011-11 | — | — | reference_only model, partial hold-out coverage (share=0.827774) |
-| M1_linear | 56.0 % | -18.1 % | False | 2011-09, 2011-11 | — | — | — |
-| M2_gbm_poisson | 52.6 % | 0.7 % | True | none | 1 | — | — |
-| M3_gbm_squared | 54.3 % | 1.5 % | True | none | 2 | — | — |
-| M4_gbm_absolute | 50.2 % | -25.8 % | False | 2011-09, 2011-11 | — | — | — |
+| M1_linear | 55.9 % | -18.2 % | False | 2011-09, 2011-11 | — | — | — |
+| M2_gbm_poisson | 52.6 % | 0.6 % | True | none | 1 | — | — |
+| M3_gbm_squared | 54.4 % | 1.6 % | True | none | 2 | — | — |
+| M4_gbm_absolute | 49.9 % | -25.2 % | False | 2011-09, 2011-11 | — | — | — |
 
 ## Back-test consistency
 
@@ -141,10 +141,10 @@ wMAPE and bias are across origins rather than at the single hold-out fit.
 | B1_last_month | 66.8 % | 21.5 % | 47.8 % | 133.8 % | 3.9 % | 4 |
 | B2_ma3 | 70.7 % | 24.5 % | 52.1 % | 130.4 % | 4.7 % | 6 |
 | B3_seasonal_naive | 100.3 % | 14.4 % | 78.9 % | 122.8 % | 42.6 % | 11 |
-| M1_linear | 70.9 % | 32.3 % | 53.0 % | 193.6 % | 3.5 % | 2 |
-| M2_gbm_poisson | 66.9 % | 26.8 % | 46.8 % | 158.3 % | 9.2 % | 3 |
-| M3_gbm_squared | 70.2 % | 29.3 % | 49.0 % | 168.1 % | 12.9 % | 5 |
-| M4_gbm_absolute | 58.3 % | 16.0 % | 46.5 % | 114.0 % | -19.3 % | 10 |
+| M1_linear | 70.9 % | 32.3 % | 52.7 % | 193.4 % | 3.6 % | 2 |
+| M2_gbm_poisson | 66.9 % | 27.1 % | 46.6 % | 159.1 % | 9.2 % | 3 |
+| M3_gbm_squared | 70.4 % | 29.3 % | 48.9 % | 167.9 % | 13.1 % | 5 |
+| M4_gbm_absolute | 58.3 % | 16.3 % | 46.4 % | 115.1 % | -19.0 % | 10 |
 
 ## Inventory KPIs per policy
 
@@ -155,8 +155,8 @@ quantity — the dataset carries no on-hand or on-order data (PRD §7).
 
 | Model | Policy | Fill rate | Stockout units | Excess units | Stockout SKU-month rate | Excess per unit shortage |
 |---|---|---|---|---|---|---|
-| M2_gbm_poisson | forecast_only | 73.3 % | 584,159 | 604,495 | 25.2 % | 1.03 |
-| M2_gbm_poisson | forecast_plus_ss | 89.9 % | 221,840 | 2,295,561 | 7.3 % | 10.35 |
+| M2_gbm_poisson | forecast_only | 73.3 % | 585,299 | 603,643 | 25.3 % | 1.03 |
+| M2_gbm_poisson | forecast_plus_ss | 89.8 % | 222,348 | 2,297,223 | 7.3 % | 10.33 |
 | B2_ma3 | forecast_only | 65.5 % | 754,376 | 446,805 | 39.1 % | 0.59 |
 | B2_ma3 | forecast_plus_ss | 88.3 % | 256,271 | 2,210,581 | 11.3 % | 8.63 |
 
@@ -164,14 +164,14 @@ quantity — the dataset carries no on-hand or on-order data (PRD §7).
 
 | z | Fill rate | Excess units | Stockout units |
 |---|---|---|---|
-| 1.28 | 88.0 % | 1,880,261 | 262,074 |
-| 1.645 | 89.9 % | 2,295,561 | 221,840 |
-| 2.05 | 91.4 % | 2,768,055 | 188,852 |
+| 1.28 | 88.0 % | 1,880,986 | 262,419 |
+| 1.645 | 89.8 % | 2,297,223 | 222,348 |
+| 2.05 | 91.3 % | 2,770,766 | 189,579 |
 
 Excess is dominated by a few very large orders: for M2_gbm_poisson under
 `forecast_plus_ss`, the `top_1pct_share` of SKU-months by excess account for
 17.6 % of total excess units, and the `top_5pct_share` account for
-42.2 % of 2,295,561 total excess units
+42.0 % of 2,297,223 total excess units
 (`excess_concentration.csv`).
 
 σ source, champion, most recent hold-out month 2011-11
@@ -190,11 +190,11 @@ Excess is dominated by a few very large orders: for M2_gbm_poisson under
 | B2_ma3 | quarter | 2011-Q2 | 36.9 % | 4.4 % | 3,127 |
 | B2_ma3 | quarter | 2011-Q3 | 35.7 % | -11.7 % | 3,190 |
 | M2_gbm_poisson | overall | all | 40.6 % | 7.2 % | 16,306 |
-| M2_gbm_poisson | quarter | 2010-Q3 | 46.8 % | -12.1 % | 3,350 |
-| M2_gbm_poisson | quarter | 2010-Q4 | 42.0 % | 27.4 % | 3,310 |
-| M2_gbm_poisson | quarter | 2011-Q1 | 49.1 % | 17.2 % | 3,329 |
-| M2_gbm_poisson | quarter | 2011-Q2 | 33.9 % | 4.3 % | 3,127 |
-| M2_gbm_poisson | quarter | 2011-Q3 | 31.5 % | -4.3 % | 3,190 |
+| M2_gbm_poisson | quarter | 2010-Q3 | 46.7 % | -12.1 % | 3,350 |
+| M2_gbm_poisson | quarter | 2010-Q4 | 41.8 % | 27.0 % | 3,310 |
+| M2_gbm_poisson | quarter | 2011-Q1 | 49.5 % | 18.3 % | 3,329 |
+| M2_gbm_poisson | quarter | 2011-Q2 | 33.8 % | 3.9 % | 3,127 |
+| M2_gbm_poisson | quarter | 2011-Q3 | 31.6 % | -4.4 % | 3,190 |
 
 This project trains and evaluates a single **one-step-ahead monthly model**: at any forecast
 origin, it predicts only the single month that immediately follows. Every quarterly figure in
@@ -202,12 +202,19 @@ origin, it predicts only the single month that immediately follows. Every quarte
 own origin (the month before the one it predicts) by the rolling back-test — never a separate
 quarterly model, and never a single forecast covering all three months at once.
 
-As a direct consequence, this MVP
+As a direct consequence, this module
 **cannot forecast all three months of a quarter at the start of the quarter**.
-The second and third months of any quarter can only be forecast once the preceding month's data
-becomes available, one month at a time. A genuine start-of-quarter, three-month-ahead forecast
-would require a separate multi-horizon or recursive forecasting approach; that is out of scope for
-this MVP and is a candidate v2 extension (PRD §32, §50).
+The second and third months of any quarter appear here only once the preceding month's data
+becomes available, one month at a time.
+
+A genuine start-of-quarter, multi-month forecast is produced by a *separate* module,
+`pipeline.multi_horizon`: it runs the same one-step-ahead champion **recursively**, feeding each
+month's forecast back into the panel as that month's units before predicting the next, and measures
+a distinct sigma for every horizon from a back-test run at that same horizon. Its output is
+`multi_horizon_plan.csv` and `period_plan.csv`, and its numbers are *not* interchangeable with the
+ones in this file: a later horizon compounds the error of every horizon before it, which is exactly
+why it carries its own, wider safety stock. `quarterly_forecast.csv` remains what it says it is —
+sums of genuine one-step-ahead forecasts, each made one month before its target.
 
 The rolling estimate for the current partial quarter is not an exception to this: it combines the
 already-observed actual sales of the quarter's completed months with the single genuine
@@ -229,4 +236,46 @@ header above.
 * `streamlit 1.39.0`
 
 **Artifacts registered by this run:**
-No artifacts were registered by this standalone run.
+* `artifacts/models/M1_linear.joblib` — 2,198 bytes
+* `artifacts/models/M2_gbm_poisson.joblib` — 744,464 bytes
+* `artifacts/models/M3_gbm_squared.joblib` — 386,096 bytes
+* `artifacts/models/M4_gbm_absolute.joblib` — 205,280 bytes
+* `artifacts/reports/evaluation_tables/abc_train.csv` — 203,688 bytes
+* `artifacts/reports/evaluation_tables/backtest_by_origin.csv` — 5,922 bytes
+* `artifacts/reports/evaluation_tables/backtest_consistency.csv` — 12,170 bytes
+* `artifacts/forecasts/backtest_predictions.csv` — 26,612,607 bytes
+* `artifacts/forecasts/baseline_predictions.csv` — 9,435,181 bytes
+* `artifacts/models/candidates_meta.json` — 1,879 bytes
+* `artifacts/reports/champion_decision.json` — 3,724 bytes
+* `data/processed/clean_data.csv` — 7,796,333 bytes
+* `data/processed/clean_transactions.parquet` — 9,861,840 bytes
+* `artifacts/reports/eda_tables/E01_cleaning_waterfall.csv` — 1,120 bytes
+* `artifacts/reports/data_quality_findings.json` — 28,152 bytes
+* `artifacts/contracts/dataset_contract.json` — 6,187 bytes
+* `artifacts/reports/eda_report.html` — 2,324,154 bytes
+* `artifacts/reports/eda_tables/index.json` — 3,835 bytes
+* `artifacts/reports/evaluation_tables/evaluation_summary.json` — 3,070 bytes
+* `artifacts/reports/evaluation_tables/excess_concentration.csv` — 1,010 bytes
+* `artifacts/reports/feature_validation.json` — 1,397 bytes
+* `data/processed/features.csv` — 7,457,869 bytes
+* `artifacts/reports/evaluation_tables/holdout_metrics_by_abc.csv` — 1,629 bytes
+* `artifacts/reports/evaluation_tables/holdout_metrics_by_month.csv` — 2,841 bytes
+* `artifacts/reports/evaluation_tables/holdout_metrics_overall.csv` — 1,004 bytes
+* `artifacts/forecasts/holdout_predictions.csv` — 5,299,096 bytes
+* `artifacts/reports/evaluation_tables/holdout_rows_all_models.csv` — 1,890,529 bytes
+* `artifacts/forecasts/holdout_simulation_rows.csv` — 28,692,000 bytes
+* `artifacts/reports/evaluation_tables/improvement_vs_b2.csv` — 459 bytes
+* `artifacts/reports/insights.md` — 4,640 bytes
+* `artifacts/forecasts/inventory_kpis.csv` — 45,927 bytes
+* `artifacts/forecasts/inventory_plan.csv` — 802,744 bytes
+* `artifacts/forecasts/latest_forecast.csv` — 354,373 bytes
+* `artifacts/models/model.joblib` — 744,608 bytes
+* `artifacts/models/model_meta.json` — 1,328 bytes
+* `artifacts/forecasts/multi_horizon_plan.csv` — 1,589,839 bytes
+* `artifacts/forecasts/period_plan.csv` — 6,185,025 bytes
+* `artifacts/forecasts/quarterly_forecast.csv` — 4,029,292 bytes
+* `artifacts/reports/evaluation_tables/quarterly_limitation.md` — 1,872 bytes
+* `artifacts/reports/evaluation_tables/quarterly_metrics.csv` — 1,412 bytes
+* `data/processed/returns_lines.parquet` — 132,403 bytes
+* `artifacts/reports/evaluation_tables/sigma_summary.csv` — 3,149 bytes
+* `artifacts/forecasts/sigma_table.csv` — 7,924,303 bytes

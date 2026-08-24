@@ -59,6 +59,7 @@ from pipeline.inventory import run_inventory_simulation
 from pipeline.latest_forecast import STEP_NAME as LATEST_FORECAST_STEP
 from pipeline.latest_forecast import run_latest_forecast
 from pipeline.models import train_models, tune
+from pipeline.multi_horizon import run_multi_horizon
 from pipeline.panel import build_panel, validate_panel
 from pipeline.quarterly import run_quarterly_aggregation
 from pipeline.reports import write_all_reports
@@ -109,6 +110,7 @@ class FlowData:
     eval_frames: dict[str, Any] = field(default_factory=dict)
     sigma_table_df: pd.DataFrame | None = None
     kpis_df: pd.DataFrame | None = None
+    sim_rows_df: pd.DataFrame | None = None
     latest: dict[str, Any] = field(default_factory=dict)
 
 
@@ -357,6 +359,7 @@ def evaluation_and_champion(state: FlowState, ctx: RunContext, data: FlowData) -
             sigma_df=sigma_df,
         )
     data.kpis_df = simulation["inventory_kpis"]
+    data.sim_rows_df = simulation["holdout_simulation_rows"]
 
     select_champion(
         eval_frames["holdout_metrics_overall"],
@@ -386,6 +389,20 @@ def inventory_policy_calibration(state: FlowState, ctx: RunContext, data: FlowDa
             backtest_df=data.backtest_df,
             abc_train_df=data.abc_train_df,
         )
+
+    # run_multi_horizon() opens its own step. It reuses the champion estimator US-23 already
+    # refitted through the origin, so the operational month is the same number in both artifacts.
+    run_multi_horizon(
+        model_cfg,
+        ctx,
+        panel_df=data.panel_df,
+        features_df=data.features_df,
+        abc_train_df=data.abc_train_df,
+        sim_rows_df=data.sim_rows_df,
+        champion=data.latest["champion"],
+        champion_model=data.latest["model"],
+        cleaning_cfg=cleaning_cfg,
+    )
 
     # run_quarterly_aggregation() opens its own step.
     run_quarterly_aggregation(
