@@ -53,7 +53,7 @@ from pipeline.feature_validation import (
 from pipeline.feature_validation import (
     leakage_check as run_leakage_check,
 )
-from pipeline.features import build_features, write_features
+from pipeline.features import build_features, read_features, write_features
 from pipeline.inventory import STEP_NAME as INVENTORY_STEP
 from pipeline.inventory import run_inventory_simulation
 from pipeline.latest_forecast import STEP_NAME as LATEST_FORECAST_STEP
@@ -245,7 +245,16 @@ def data_scientist_work(state: FlowState, ctx: RunContext, data: FlowData) -> Fl
             after=int(len(frame)),
         )
         write_features(frame, ctx)
-        data.features_df = frame
+        # Train on exactly what was published. `write_features` writes at "%.6f", so the frame in
+        # memory is not the frame in the file: rolling means differ by ~3e-7 and
+        # avg_unit_price_lag_1 by up to 5e-5 (clean_data.csv stores prices at 4 dp). Those look
+        # negligible and are not — HistGradientBoosting bins each feature by quantiles, so a
+        # hair's movement in a value can shift a bin edge and reassign many rows at once, changing
+        # predictions by whole percent. Reading the file back makes `features.csv` the single
+        # source of truth for every model fitted afterwards, which is what lets anyone reproduce
+        # the published predictions from the published inputs (§40) — and what
+        # tests/test_backtest.py's cross-check against holdout_predictions.csv actually verifies.
+        data.features_df = read_features(_resolve_read(ctx, _repo_relative(paths.FEATURES)))
 
     return state
 

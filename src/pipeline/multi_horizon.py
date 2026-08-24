@@ -54,7 +54,7 @@ from pipeline.config import (
     load_model_config,
 )
 from pipeline.contract import read_panel
-from pipeline.features import build_features_for_origin
+from pipeline.features import build_features_for_origin, read_features
 from pipeline.inventory import POLICY_FORECAST_PLUS_SS, safety_stock, target_inventory
 from pipeline.latest_forecast import (
     STATUS_FORECAST,
@@ -269,6 +269,21 @@ def fit_champion_at(
     return model
 
 
+def _published_rows(features_df: pd.DataFrame | None, target: str) -> pd.DataFrame | None:
+    """The published feature rows for ``target``, or ``None`` when the file does not cover it.
+
+    ``features.csv`` stops at the last full month (§16), so the operational target is never in it
+    and the caller rebuilds — exactly as :func:`pipeline.latest_forecast.build_latest_forecast`
+    does for the same month.
+    """
+    if features_df is None or features_df.empty:
+        return None
+    rows = features_df.loc[features_df["target_month"].astype(str) == target]
+    if rows.empty:
+        return None
+    return rows.reset_index(drop=True)
+
+
 def recursive_forecast(
     panel_df: pd.DataFrame,
     model: Any,
@@ -277,6 +292,7 @@ def recursive_forecast(
     max_horizon: int,
     *,
     champion: str,
+    features_df: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Forecast ``origin + 1 … origin + max_horizon`` by feeding each forecast back into the panel.
 
@@ -287,6 +303,14 @@ def recursive_forecast(
     ``step_origin`` is the origin the *features* of that row were built at (``origin + h - 1``);
     ``forecast_origin`` stays the real one, the last month backed by data. Recording both is what
     makes a horizon-2 row legible: its features are built from a month that is itself a forecast.
+
+    ``features_df`` — the published ``features.csv`` — is used for **horizon 1 only**, when it
+    already covers that target month. Horizon 1 is an ordinary one-step-ahead forecast from real
+    history, so its feature row is the row the rest of the pipeline fitted and scored; rebuilding
+    it here from the in-memory panel would recompute the same numbers at a different precision
+    (the file is written at ``"%.6f"``) and the horizon-1 residuals would then disagree with the
+    back-test's, giving the operational month two different sigmas. Horizons beyond the first are
+    always rebuilt: their history contains a forecast, so no published row can describe them.
     """
     work = panel_df.copy()
     work["units_sold"] = work["units_sold"].astype(float)
@@ -298,7 +322,9 @@ def recursive_forecast(
         target = _shift_month(origin, horizon)
 
         work = ensure_month(work, target)
-        features = build_features_for_origin(work, step_origin, cfg.active_rule.k, cfg)
+        features = _published_rows(features_df, target) if horizon == 1 else None
+        if features is None:
+            features = build_features_for_origin(work, step_origin, cfg.active_rule.k, cfg)
         if features.empty:
             break
 
@@ -461,7 +487,7 @@ def horizon_residuals(
         known_panel = panel_df.loc[panel_df["month"].astype(str) <= origin].copy()
         model = fit_champion_at(features_df, champion, origin, cfg, cfg.seed)
         predictions = recursive_forecast(
-            known_panel, model, cfg, origin, reachable, champion=champion
+            known_panel, model, cfg, origin, reachable, champion=champion, features_df=features_df
         )
         if predictions.empty:
             continue
@@ -960,7 +986,7 @@ def run(argv: list[str] | None = None) -> int:
     try:
         cfg = load_model_config()
         panel_df = read_panel(paths.CLEAN_DATA)
-        features_df = _read_csv(paths.FEATURES, "features.csv")
+        features_df = read_features()
         abc_train_df = _read_csv(paths.EVAL_TABLES_DIR / "abc_train.csv", "abc_train.csv")
         sim_rows_df = _read_csv(paths.HOLDOUT_SIMULATION_ROWS, "holdout_simulation_rows.csv")
         champion = champion_id(resolve_champion(ctx))

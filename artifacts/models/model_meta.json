@@ -19,8 +19,8 @@
   ],
   "forecast_origin": "2011-11",
   "holdout_metrics_reference": {
-    "bias": 0.006409,
-    "wmape": 0.525909
+    "bias": 0.005392,
+    "wmape": 0.52516
   },
   "inventory_output_name": "Recommended Target Inventory",
   "kind": "hist_gradient_boosting",
@@ -32,8 +32,8 @@
     "max_iter": 200,
     "max_leaf_nodes": 31
   },
-  "refit_at": "2026-08-24T18:13:11.541774+00:00",
-  "run_id": "20260824T181001Z-27103c",
+  "refit_at": "2026-08-24T19:04:44.354850+00:00",
+  "run_id": "20260824T190154Z-ae08a3",
   "seed": 42,
   "sklearn_version": "1.5.2",
   "target_month": "2011-12",
