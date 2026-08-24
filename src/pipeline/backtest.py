@@ -84,6 +84,7 @@ from pipeline import paths
 from pipeline.baselines import BASELINE_MODEL_IDS, predict_baselines
 from pipeline.config import MODEL_IDS, ModelConfig, load_model_config
 from pipeline.contract import read_panel
+from pipeline.features import read_features
 from pipeline.metrics import metrics_table
 from pipeline.models import ORIGIN_PREDICTIONS_COLUMNS, TRAINABLE_MODEL_IDS, fit_predict_one_origin
 from pipeline.run_context import RunContext
@@ -293,14 +294,9 @@ def write_backtest_summary(frame: pd.DataFrame, ctx: RunContext) -> Path:
 # CLI: python -m pipeline.backtest [--models MODEL_ID [MODEL_ID ...]]
 # --------------------------------------------------------------------------
 def _read_features() -> pd.DataFrame:
-    if not paths.FEATURES.is_file():
-        raise FileNotFoundError(
-            f"{paths.FEATURES} not found. Run `python -m pipeline.features` first."
-        )
-    return pd.read_csv(
-        paths.FEATURES,
-        dtype={"stock_code": "string", "forecast_origin": "string", "target_month": "string"},
-    )
+    """The published ``features.csv``. One reader for the whole project (:func:`
+    pipeline.features.read_features`) so the standalone CLI and the Flow cannot drift apart."""
+    return read_features()
 
 
 def run(argv: list[str] | None = None) -> int:

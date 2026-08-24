@@ -168,14 +168,14 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 17165D,C,0.000051,0.966172,training_window
 17174,C,0.000001,0.999938,training_window
 17178,C,0.000012,0.995906,training_window
-17181,C,0.000048,0.969147,training_window
+17181,C,0.000048,0.969195,training_window
 17191A,C,0.000008,0.997605,training_window
 18007,C,0.000063,0.954233,training_window
 18010,C,0.000002,0.999725,training_window
 18094C,C,0.000035,0.981221,training_window
 18096C,C,0.000026,0.987903,training_window
 18097A,C,0.000003,0.999587,training_window
-18097B,C,0.000001,0.999874,training_window
+18097B,C,0.000001,0.999876,training_window
 18097C,A,0.000273,0.775175,training_window
 18098A,C,0.000000,0.999977,training_window
 18098B,C,0.000001,0.999956,training_window
@@ -199,7 +199,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 20661,C,0.000063,0.954486,training_window
 20662,C,0.000033,0.982623,training_window
 20663,C,0.000026,0.987489,training_window
-20664,C,0.000007,0.998051,training_window
+20664,C,0.000007,0.998044,training_window
 20665,A,0.000269,0.778693,training_window
 20666,C,0.000029,0.985734,training_window
 20667,C,0.000005,0.998977,training_window
@@ -344,7 +344,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 20845,C,0.000034,0.981813,training_window
 20846,B,0.000118,0.900822,training_window
 20847,C,0.000016,0.994087,training_window
-20848,C,0.000007,0.998044,training_window
+20848,C,0.000007,0.998051,training_window
 20849,C,0.000045,0.972872,training_window
 20850,C,0.000054,0.963604,training_window
 20851,C,0.000032,0.983081,training_window
@@ -352,7 +352,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 20855,C,0.000018,0.992727,training_window
 20856,C,0.000044,0.973317,training_window
 20857,C,0.000031,0.984245,training_window
-20858,C,0.000000,0.999971,training_window
+20858,C,0.000000,0.999970,training_window
 20860,C,0.000003,0.999475,training_window
 20861,C,0.000007,0.997960,training_window
 20862,C,0.000052,0.965399,training_window
@@ -415,7 +415,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 20960,B,0.000192,0.834485,training_window
 20961,A,0.000286,0.766817,training_window
 20963,A,0.000276,0.771605,training_window
-20964,C,0.000004,0.999240,training_window
+20964,C,0.000004,0.999244,training_window
 20966,A,0.000319,0.743645,training_window
 20967,A,0.000300,0.755395,training_window
 20968,C,0.000014,0.994897,training_window
@@ -486,7 +486,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 21055,B,0.000223,0.813030,training_window
 21056,A,0.000325,0.739791,training_window
 21058,B,0.000122,0.897454,training_window
-21059,B,0.000079,0.938479,training_window
+21059,B,0.000079,0.938558,training_window
 21060,C,0.000055,0.962734,training_window
 21061,C,0.000060,0.957578,training_window
 21062,C,0.000047,0.970247,training_window
@@ -2252,7 +2252,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 23065,B,0.000086,0.931135,training_window
 23066,C,0.000052,0.965191,training_window
 23067,C,0.000027,0.987011,training_window
-23068,C,0.000048,0.969195,training_window
+23068,C,0.000048,0.969147,training_window
 23069,C,0.000008,0.997871,training_window
 23070,C,0.000012,0.995519,training_window
 23071,C,0.000028,0.986439,training_window
@@ -2279,7 +2279,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 23092,C,0.000036,0.980611,training_window
 23093,C,0.000036,0.981043,training_window
 23094,C,0.000029,0.985502,training_window
-23096,C,0.000019,0.991864,training_window
+23096,C,0.000019,0.991883,training_window
 23099,C,0.000010,0.996968,training_window
 23100,C,0.000022,0.989917,training_window
 23101,C,0.000011,0.996079,training_window
@@ -2805,7 +2805,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 35015,C,0.000010,0.996617,training_window
 35051B,C,0.000000,0.999979,training_window
 35071,C,0.000004,0.999237,training_window
-35085E,C,0.000003,0.999427,training_window
+35085E,C,0.000003,0.999430,training_window
 35095A,C,0.000039,0.978655,training_window
 35095B,C,0.000046,0.971968,training_window
 35096A,C,0.000020,0.990987,training_window
@@ -2826,7 +2826,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 35596,C,0.000002,0.999793,training_window
 35597A,C,0.000001,0.999932,training_window
 35597B,C,0.000017,0.993280,training_window
-35597D,C,0.000001,0.999962,training_window
+35597D,C,0.000001,0.999963,training_window
 35598A,C,0.000000,0.999993,training_window
 35598B,C,0.000037,0.980283,training_window
 35598C,C,0.000000,0.999994,training_window
@@ -2846,7 +2846,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 35633B,C,0.000002,0.999791,training_window
 35637A,B,0.000081,0.935698,training_window
 35637C,C,0.000020,0.991630,training_window
-35638A,C,0.000001,0.999875,training_window
+35638A,C,0.000001,0.999874,training_window
 35638B,C,0.000014,0.994911,training_window
 35644,C,0.000003,0.999528,training_window
 35645,C,0.000021,0.990506,training_window
@@ -3027,7 +3027,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 37503,A,0.001913,0.252831,training_window
 37506,C,0.000014,0.994685,training_window
 37508,C,0.000017,0.993007,training_window
-37509,C,0.000005,0.998681,training_window
+37509,C,0.000005,0.998686,training_window
 40001,B,0.000110,0.909703,training_window
 40002,C,0.000005,0.998851,training_window
 40003,B,0.000093,0.924079,training_window
@@ -3354,7 +3354,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 79030D,C,0.000041,0.976735,training_window
 79030G,B,0.000108,0.911122,training_window
 79051A,C,0.000014,0.995022,training_window
-79062D,C,0.000001,0.999963,training_window
+79062D,C,0.000001,0.999962,training_window
 79063C,C,0.000002,0.999780,training_window
 79063D,C,0.000002,0.999831,training_window
 79065A,C,0.000003,0.999555,training_window
@@ -3506,7 +3506,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84247J,C,0.000001,0.999920,training_window
 84247K,C,0.000017,0.993331,training_window
 84247L,C,0.000037,0.979838,training_window
-84247N,C,0.000019,0.991883,training_window
+84247N,C,0.000019,0.991864,training_window
 84249A,C,0.000006,0.998432,training_window
 84249D,C,0.000026,0.987515,training_window
 84250M,C,0.000001,0.999893,training_window
@@ -3618,7 +3618,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84536B,B,0.000072,0.946063,training_window
 84537B,C,0.000004,0.999301,training_window
 84539,C,0.000005,0.998905,training_window
-84546,C,0.000003,0.999661,training_window
+84546,C,0.000003,0.999663,training_window
 84548,C,0.000004,0.999072,training_window
 84549,C,0.000007,0.997938,training_window
 84550,C,0.000002,0.999811,training_window
@@ -3649,7 +3649,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84581,B,0.000112,0.907375,training_window
 84582,C,0.000004,0.999063,training_window
 84584,C,0.000041,0.976694,training_window
-84586L,C,0.000003,0.999430,training_window
+84586L,C,0.000003,0.999427,training_window
 84592,C,0.000031,0.984059,training_window
 84593,C,0.000006,0.998616,training_window
 84595B,C,0.000031,0.984399,training_window
@@ -3671,11 +3671,11 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84608,C,0.000004,0.999334,training_window
 84609,C,0.000048,0.969724,training_window
 84611B,C,0.000003,0.999488,training_window
-84612B,C,0.000004,0.999244,training_window
+84612B,C,0.000004,0.999240,training_window
 84613A,C,0.000008,0.997788,training_window
 84613C,C,0.000019,0.991767,training_window
 84614A,C,0.000009,0.997025,training_window
-84614C,C,0.000001,0.999876,training_window
+84614C,C,0.000001,0.999875,training_window
 84615,C,0.000056,0.961064,training_window
 84616,B,0.000084,0.932743,training_window
 84617,C,0.000010,0.996872,training_window
@@ -3759,7 +3759,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84726,C,0.000030,0.985061,training_window
 84731,C,0.000000,0.999993,training_window
 84732B,C,0.000001,0.999953,training_window
-84732D,C,0.000000,0.999970,training_window
+84732D,C,0.000000,0.999971,training_window
 84741C,C,0.000028,0.986272,training_window
 84743C,C,0.000001,0.999942,training_window
 84744,C,0.000013,0.995354,training_window
@@ -3832,7 +3832,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84818,B,0.000126,0.893864,training_window
 84819,B,0.000078,0.938872,training_window
 84820,C,0.000052,0.964825,training_window
-84821,C,0.000046,0.971785,training_window
+84821,C,0.000046,0.971831,training_window
 84823,B,0.000091,0.925829,training_window
 84824,C,0.000048,0.969099,training_window
 84826,C,0.000058,0.959581,training_window
@@ -3864,7 +3864,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84857C,C,0.000022,0.990420,training_window
 84858A,C,0.000010,0.996834,training_window
 84858B,C,0.000032,0.983016,training_window
-84858C,C,0.000046,0.971831,training_window
+84858C,C,0.000046,0.971785,training_window
 84859A,C,0.000028,0.986300,training_window
 84859B,C,0.000028,0.986355,training_window
 84859C,C,0.000029,0.985531,training_window
@@ -3905,7 +3905,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84905,B,0.000073,0.944331,training_window
 84906,C,0.000023,0.989216,training_window
 84907,C,0.000065,0.952304,training_window
-84908A,B,0.000079,0.938558,training_window
+84908A,B,0.000079,0.938479,training_window
 84908B,B,0.000079,0.937375,training_window
 84909A,B,0.000210,0.821447,training_window
 84910A,B,0.000083,0.933660,training_window
@@ -3927,7 +3927,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 84924D,C,0.000021,0.990966,training_window
 84924F,C,0.000020,0.991432,training_window
 84925A,C,0.000026,0.987954,training_window
-84925C,C,0.000005,0.998686,training_window
+84925C,C,0.000005,0.998692,training_window
 84925D,C,0.000050,0.967332,training_window
 84925E,C,0.000010,0.996766,training_window
 84925F,C,0.000062,0.955932,training_window
@@ -4426,7 +4426,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 90059F,C,0.000004,0.999279,training_window
 90060B,C,0.000003,0.999634,training_window
 90060C,C,0.000003,0.999491,training_window
-90060D,C,0.000005,0.998692,training_window
+90060D,C,0.000005,0.998681,training_window
 90060F,C,0.000011,0.996226,training_window
 90062,B,0.000195,0.831777,training_window
 90063A,C,0.000009,0.997281,training_window
@@ -4451,7 +4451,7 @@ stock_code,abc_class,revenue_share,cum_share,abc_source
 90078,C,0.000005,0.998811,training_window
 90079,C,0.000005,0.999032,training_window
 90081A,C,0.000015,0.994393,training_window
-90081B,C,0.000003,0.999663,training_window
+90081B,C,0.000003,0.999661,training_window
 90081C,C,0.000015,0.994165,training_window
 90082A,C,0.000021,0.990842,training_window
 90082B,C,0.000025,0.988106,training_window

@@ -62,11 +62,11 @@
     }
   ],
   "passed": true,
-  "run_id": "20260817T081028Z-e986bd",
+  "run_id": "20260824T190154Z-ae08a3",
   "sample_sizes": {
     "lag_sample_rows": 500,
     "permutation_products": 300
   },
   "seed": 42,
-  "timestamp": "2026-08-17T08:10:51.831602+00:00"
+  "timestamp": "2026-08-24T19:02:38.234290+00:00"
 }

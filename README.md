@@ -283,7 +283,10 @@ recomputing a number the pipeline already computed:
 1. **Executive Dashboard** — active products, total next-month forecast and target inventory,
    champion wMAPE/Bias, hold-out fill rate, stockout/excess units, run id and data hash.
 2. **Product Forecasts** — one row per active product (forecast, safety stock, target inventory,
-   σ source, ABC class) with filters and CSV download.
+   σ source, ABC class) with filters and CSV download, plus a **period view**: pick any month or
+   quarter the pipeline covers and see its stocking requirement. Months run from the hold-out
+   (where the actual demand is known) through the recursive forecast horizons; a quarter is the
+   sum of its monthly targets, labelled with the months it actually covers (§32A).
 3. **Product Detail** — monthly chart of actuals, back-test forecasts and the next-month forecast
    with a ± z·σ band, plus product metadata.
 4. **Model Evaluation** — every candidate's wMAPE/Bias/MAE/RMSE overall, by month and by ABC, and

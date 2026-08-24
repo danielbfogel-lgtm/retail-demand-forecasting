@@ -53,12 +53,13 @@ from pipeline.feature_validation import (
 from pipeline.feature_validation import (
     leakage_check as run_leakage_check,
 )
-from pipeline.features import build_features, write_features
+from pipeline.features import build_features, read_features, write_features
 from pipeline.inventory import STEP_NAME as INVENTORY_STEP
 from pipeline.inventory import run_inventory_simulation
 from pipeline.latest_forecast import STEP_NAME as LATEST_FORECAST_STEP
 from pipeline.latest_forecast import run_latest_forecast
 from pipeline.models import train_models, tune
+from pipeline.multi_horizon import run_multi_horizon
 from pipeline.panel import build_panel, validate_panel
 from pipeline.quarterly import run_quarterly_aggregation
 from pipeline.reports import write_all_reports
@@ -109,6 +110,7 @@ class FlowData:
     eval_frames: dict[str, Any] = field(default_factory=dict)
     sigma_table_df: pd.DataFrame | None = None
     kpis_df: pd.DataFrame | None = None
+    sim_rows_df: pd.DataFrame | None = None
     latest: dict[str, Any] = field(default_factory=dict)
 
 
@@ -243,7 +245,16 @@ def data_scientist_work(state: FlowState, ctx: RunContext, data: FlowData) -> Fl
             after=int(len(frame)),
         )
         write_features(frame, ctx)
-        data.features_df = frame
+        # Train on exactly what was published. `write_features` writes at "%.6f", so the frame in
+        # memory is not the frame in the file: rolling means differ by ~3e-7 and
+        # avg_unit_price_lag_1 by up to 5e-5 (clean_data.csv stores prices at 4 dp). Those look
+        # negligible and are not — HistGradientBoosting bins each feature by quantiles, so a
+        # hair's movement in a value can shift a bin edge and reassign many rows at once, changing
+        # predictions by whole percent. Reading the file back makes `features.csv` the single
+        # source of truth for every model fitted afterwards, which is what lets anyone reproduce
+        # the published predictions from the published inputs (§40) — and what
+        # tests/test_backtest.py's cross-check against holdout_predictions.csv actually verifies.
+        data.features_df = read_features(_resolve_read(ctx, _repo_relative(paths.FEATURES)))
 
     return state
 
@@ -357,6 +368,7 @@ def evaluation_and_champion(state: FlowState, ctx: RunContext, data: FlowData) -
             sigma_df=sigma_df,
         )
     data.kpis_df = simulation["inventory_kpis"]
+    data.sim_rows_df = simulation["holdout_simulation_rows"]
 
     select_champion(
         eval_frames["holdout_metrics_overall"],
@@ -386,6 +398,20 @@ def inventory_policy_calibration(state: FlowState, ctx: RunContext, data: FlowDa
             backtest_df=data.backtest_df,
             abc_train_df=data.abc_train_df,
         )
+
+    # run_multi_horizon() opens its own step. It reuses the champion estimator US-23 already
+    # refitted through the origin, so the operational month is the same number in both artifacts.
+    run_multi_horizon(
+        model_cfg,
+        ctx,
+        panel_df=data.panel_df,
+        features_df=data.features_df,
+        abc_train_df=data.abc_train_df,
+        sim_rows_df=data.sim_rows_df,
+        champion=data.latest["champion"],
+        champion_model=data.latest["model"],
+        cleaning_cfg=cleaning_cfg,
+    )
 
     # run_quarterly_aggregation() opens its own step.
     run_quarterly_aggregation(

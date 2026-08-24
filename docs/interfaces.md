@@ -879,3 +879,90 @@ Rules this module adds to §6:
 * **`inventory_plan.csv` can never be byte-identical across two runs.** It carries a `run_id`
   provenance column (US-23), so a determinism comparison must exclude that column — every other
   column, and every other artifact, is identical between a `--no-llm` run and an LLM run.
+
+---
+
+## 15. `pipeline.multi_horizon` — recursive horizons and the period plan (US-40)
+
+```python
+STEP_NAME = "multi_horizon_forecast"
+MULTI_HORIZON_COLUMNS, PERIOD_PLAN_COLUMNS          # published column orders
+PERIOD_MONTH, PERIOD_QUARTER                        # period_plan.csv "period_type" values
+SOURCE_HOLDOUT, SOURCE_FORECAST, SOURCE_MIXED       # ... and its "source" values
+MONTHS_PER_QUARTER = 3
+
+horizon_months(origin, max_horizon) -> list[str]     # ["2011-12", "2012-01", "2012-02"]
+quarter_of(month) -> str                             # delegates to quarterly.quarter_label
+backtest_origins(cfg) -> list[str]
+
+ensure_month(panel_df, month) -> pd.DataFrame                        # pure
+set_forecast_units(panel_df, month, forecasts, carry_forward_columns) -> pd.DataFrame   # pure
+fit_champion_at(features_df, champion, origin, cfg, seed) -> estimator
+recursive_forecast(panel_df, model, cfg, origin, max_horizon, *, champion) -> pd.DataFrame  # pure
+partial_month_unreachable(panel_df, model, cfg, origin, max_horizon, cleaning_cfg,
+                          *, champion) -> bool                        # pure
+horizon_residuals(panel_df, features_df, cfg, champion, last_full_month, max_horizon)  # pure
+horizon_sigma(residuals_df, abc_train_df, forecast_df, champion, policy_cfg)           # pure
+
+build_multi_horizon_plan(forecast_df, residuals_df, abc_train_df, panel_df, policy_cfg,
+                         *, champion, run_id) -> pd.DataFrame          # pure
+holdout_month_rows(sim_rows_df, policy_cfg, *, champion) -> pd.DataFrame   # pure
+forecast_month_rows(plan_df) -> pd.DataFrame                               # pure
+build_period_plan(month_rows, panel_df, *, run_id) -> pd.DataFrame         # pure
+validate_multi_horizon(plan_df, residuals_df, period_df, policy_cfg, *, origin,
+                       last_full_month, partial_month_clean) -> ValidationResult   # pure
+
+run_multi_horizon(cfg, ctx, *, panel_df, features_df, abc_train_df, sim_rows_df,
+                  champion, champion_model, policy_cfg=None, cleaning_cfg=None) -> dict
+run(argv=None) -> int                                # python -m pipeline.multi_horizon
+```
+
+`run_multi_horizon` returns `{forecasts, residuals, multi_horizon_plan, period_plan, validation}`
+and writes two artifacts, **both through `ctx.out()`** (§6 rule 1):
+`artifacts/forecasts/multi_horizon_plan.csv` (`paths.MULTI_HORIZON_PLAN`) and
+`artifacts/forecasts/period_plan.csv` (`paths.PERIOD_PLAN`). It **opens its own `ctx.step(...)`** —
+it calls `ctx.log_rows`. Flow step 8 calls it after `run_latest_forecast`, passing
+`data.latest["model"]` as `champion_model`.
+
+### `multi_horizon_plan.csv` — published schema, extend but never rename
+
+One row per `(stock_code, horizon)` for products active at that horizon, sorted by `horizon,
+stock_code`: `stock_code, description, forecast_origin, horizon, target_month, model, forecast,
+sigma, sigma_source, n_residuals_product, z, safety_stock, target_inventory, abc_class, status,
+run_id`. `forecast_origin` is the real origin (`raw.last_full_month`) on **every** row;
+`target_month` is `forecast_origin + horizon`. Horizon 1 is the same month as `inventory_plan.csv`
+and is produced by the same estimator, but the two files are not row-identical: the plan covers the
+whole panel universe with statuses, this covers the active products only.
+
+### `period_plan.csv` — published schema, extend but never rename
+
+One row per `(stock_code, period_type, period)`, sorted by `period_type, period, stock_code`:
+`stock_code, description, abc_class, period_type, period, model, forecast, safety_stock,
+target_inventory, actual, n_months, months_included, complete, source, run_id`.
+
+Month rows come from two places and say which: the hold-out months from US-21's simulation
+(`source = holdout_simulation`, `actual` known) and the recursive horizons
+(`source = multi_horizon_forecast`, `actual` empty). Quarter rows are the **sum of their monthly
+rows** — `complete` is true only when three months were summed, `months_included` names them, and a
+quarter reports an `actual` only when every month of it is known. A quarter whose months came from
+both stages is `source = mixed`.
+
+Rules this module adds to §6:
+
+* **A forecast month's panel row is replaced wholesale, never merged.** `set_forecast_units`
+  overwrites `units_sold` with the forecast (0 where a product has none) and zeroes the
+  non-feature measurement columns; only `multi_horizon.carry_forward_columns` are carried from the
+  previous month, because `invoice_count_lag_1` and `avg_unit_price_lag_1` are §17 features no
+  demand model predicts. This is what makes December 2011's partial actuals unreachable at every
+  horizon, and `partial_month_unreachable` proves it by perturbation (§2.5, §8).
+* **Each horizon gets its own σ.** `horizon_residuals` re-runs the recursion from every rolling
+  origin and scores horizon `h` against `origin + h`; horizon 3's residuals are wider than horizon
+  1's, so its safety stock is too. Never price a horizon with `sigma_table`'s one-step-ahead σ.
+* **The usable origins are read, not assumed.** The configured back-test window is intersected with
+  the panel's month range *and* with the first target `features.csv` covers — `lag_3` needs three
+  months of history, so a short panel (the CI sample fixture) simply yields fewer residuals rather
+  than raising.
+* **`max_horizon` is config, and it bounds the quarter view.** At `max_horizon = 3` from origin
+  2011-11 the forecast months are 2011-12, 2012-01 and 2012-02, so 2011-Q4 is complete (October and
+  November come from the hold-out) while 2012-Q1 is a two-month partial. Raising the config value
+  to 4 completes 2012-Q1 — and lengthens the recursion that produces it.

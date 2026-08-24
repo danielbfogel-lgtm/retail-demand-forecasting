@@ -267,6 +267,63 @@ class TestProductForecastsScreen:
         assert download_buttons[0].label == "Download CSV"
         assert download_buttons[0].proto.url.endswith(".csv")
 
+    # --- US-40: the month and quarter period views -------------------------
+    def test_month_view_opens_on_the_first_forecast_month(self) -> None:
+        """The planner's question is about what is ahead, so the selector opens past the hold-out
+        months on the first month that is actually a forecast."""
+        at = AppTest.from_file(PRODUCT_FORECASTS, default_timeout=60)
+        at.run()
+        at.radio[0].set_value("By month").run()
+
+        assert not at.exception
+        month_select = next(s for s in at.selectbox if s.label == "Month")
+        plan = pd.read_csv(paths.PERIOD_PLAN, dtype={"stock_code": str})
+        months = plan.loc[plan["period_type"] == "month"]
+        first_forecast = sorted(
+            months.loc[months["source"] != "holdout_simulation", "period"].unique()
+        )[0]
+        assert month_select.value == first_forecast
+
+    def test_month_view_totals_come_straight_from_the_artifact(self) -> None:
+        """The screen filters and displays; it never re-aggregates. The displayed target inventory
+        must therefore equal the artifact's own numbers for that month."""
+        at = AppTest.from_file(PRODUCT_FORECASTS, default_timeout=60)
+        at.run()
+        at.radio[0].set_value("By month").run()
+
+        assert not at.exception
+        month_select = next(s for s in at.selectbox if s.label == "Month")
+        shown = at.dataframe[0].value
+
+        plan = pd.read_csv(paths.PERIOD_PLAN, dtype={"stock_code": str})
+        expected = plan.loc[
+            (plan["period_type"] == "month") & (plan["period"] == month_select.value)
+        ]
+        assert len(shown) == len(expected)
+        assert shown["Recommended Target Inventory"].sum() == expected["target_inventory"].sum()
+
+    def test_quarter_view_names_the_months_behind_each_row(self) -> None:
+        """A quarter row is a sum of months, so the table has to say which months it summed —
+        otherwise a partial quarter reads exactly like a whole one."""
+        at = AppTest.from_file(PRODUCT_FORECASTS, default_timeout=60)
+        at.run()
+        at.radio[0].set_value("By quarter").run()
+
+        assert not at.exception
+        shown = at.dataframe[0].value
+        assert "Months" in shown.columns
+        assert "Complete" in shown.columns
+        assert shown["Months"].str.contains("-").all()
+
+    def test_period_views_render_exactly_one_download_button(self) -> None:
+        for view in ("By month", "By quarter"):
+            at = AppTest.from_file(PRODUCT_FORECASTS, default_timeout=60)
+            at.run()
+            at.radio[0].set_value(view).run()
+
+            assert not at.exception, view
+            assert len(at.get("download_button")) == 1, view
+
 
 class TestProductDetailScreen:
     """Screen 3 — Product Detail (US-28, PRD §33.3). Runs against the real artifacts."""

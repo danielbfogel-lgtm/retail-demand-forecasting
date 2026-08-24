@@ -2,7 +2,7 @@
 
 *Dataset:* Online Retail II (UCI), 2009-12 to 2011-11 complete, plus the partial month 2011-12 (shown, never scored).
 
-*Run:* `20260816T130627Z-674246` · *Generated:* 2026-08-16T13:07:07.411211+00:00
+*Run:* `20260824T190154Z-ae08a3` · *Generated:* 2026-08-24T19:02:24.698884+00:00
 
 *Provenance:* every number below was computed by the pipeline and written to a table under `artifacts/reports/eda_tables/`. The narrative may be rewritten by the Business & EDA Analyst agent in LLM mode, but the numbers may only ever come from those tables, and the same guard checks both versions (PRD §38).
 

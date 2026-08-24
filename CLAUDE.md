@@ -43,7 +43,10 @@ pass. Read this list before writing any code.
    log and compare against*, never literals in code and never asserted in tests. (§14 convention, §40)
 5. **December 2011 is never scored.** It is a partial month (through 9 Dec). It may be shown as
    "partial actual" (hatched, labelled), and it is the target of the latest operational forecast —
-   but it never enters a metric. Last full month is 2011-11. (§8, §16, §21)
+   but it never enters a metric. Last full month is 2011-11. (§8, §16, §21) The recursive horizons
+   of §32A obey the same boundary the other way round: from the first forecast month onward the
+   panel's units are the model's forecast, so December's truncated actuals never enter a feature
+   window either — `pipeline.multi_horizon.partial_month_unreachable` proves it by perturbation.
 6. **Gross demand.** The target is units sold on positive sales lines. Cancellations (`C` invoices)
    and adjustments are **not** subtracted — inventory was needed to fulfil the original order.
    `returned_units` is EDA-only and is **never** a feature. Rows without `Customer ID` are **kept**.
@@ -84,7 +87,8 @@ artifacts/
     models/model.joblib               # REQUIRED — champion (refit through 2011-11)
     models/<model_id>.joblib          # candidates
     forecasts/backtest_predictions.csv, latest_forecast.csv, inventory_plan.csv,
-              sigma_table.csv, inventory_kpis.csv, holdout_simulation_rows.csv
+              sigma_table.csv, inventory_kpis.csv, holdout_simulation_rows.csv,
+              multi_horizon_plan.csv, period_plan.csv
     reports/eda_report.html, insights.md, evaluation_report.md, model_card.md   # REQUIRED
     reports/figures/, eda_tables/, evaluation_tables/, champion_decision.json,
             data_quality_findings.json, feature_validation.json
@@ -257,6 +261,13 @@ Fill Rate       = Σ Fulfilled / Σ Actual
 **global**. The level used is stored per product as `sigma_source` and shown in the app.
 
 Active product (§14): at least one positive sale in the `k = 6` months before the target month.
+
+Multi-horizon (§32A): horizons beyond the operational month are **recursive** — each month's
+forecast is fed back into the panel as that month's units, and the same champion predicts the next.
+Every horizon carries its own robust σ, measured from a back-test at that horizon; never price a
+horizon with the one-step-ahead σ. A quarter's target inventory is the **sum of its monthly
+targets** (lead time is one month, so the buffer is held monthly) — there is no quarterly model and
+no quarterly σ.
 
 Temporal split (§21): train targets **2010-03 … 2011-05**; internal validation folds
 **2011-01 … 2011-05**; hold-out **2011-06 … 2011-11**; back-test origins **2010-05 … 2011-10**.

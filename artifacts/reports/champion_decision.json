@@ -2,7 +2,7 @@
   "best_baseline": "B1_last_month",
   "candidates": [
     {
-      "bias": -0.084635,
+      "bias": -0.08463548371121794,
       "excluded_reason": null,
       "gate1_pass": true,
       "gate2_rank": 3,
@@ -12,10 +12,10 @@
       "gate3_fill_rate": null,
       "model": "B1_last_month",
       "months_over_bias_threshold": [],
-      "wmape": 0.557127
+      "wmape": 0.5571267541519316
     },
     {
-      "bias": -0.173887,
+      "bias": -0.17388650226146996,
       "excluded_reason": null,
       "gate1_pass": false,
       "gate2_rank": null,
@@ -28,10 +28,10 @@
         "2011-09",
         "2011-11"
       ],
-      "wmape": 0.547412
+      "wmape": 0.5474118295401662
     },
     {
-      "bias": 0.350313,
+      "bias": 0.35031332351360933,
       "excluded_reason": "reference_only model, partial hold-out coverage (share=0.827774)",
       "gate1_pass": false,
       "gate2_rank": null,
@@ -47,10 +47,10 @@
         "2011-10",
         "2011-11"
       ],
-      "wmape": 0.895906
+      "wmape": 0.8959055954151879
     },
     {
-      "bias": -0.18122,
+      "bias": -0.1812195676209192,
       "excluded_reason": null,
       "gate1_pass": false,
       "gate2_rank": null,
@@ -63,10 +63,10 @@
         "2011-09",
         "2011-11"
       ],
-      "wmape": 0.560314
+      "wmape": 0.5603135132879192
     },
     {
-      "bias": 0.006891,
+      "bias": 0.005392179487347675,
       "excluded_reason": null,
       "gate1_pass": true,
       "gate2_rank": 1,
@@ -76,10 +76,10 @@
       "gate3_fill_rate": null,
       "model": "M2_gbm_poisson",
       "months_over_bias_threshold": [],
-      "wmape": 0.525958
+      "wmape": 0.5251597185134873
     },
     {
-      "bias": 0.015059,
+      "bias": 0.01321965980906641,
       "excluded_reason": null,
       "gate1_pass": true,
       "gate2_rank": 2,
@@ -89,10 +89,10 @@
       "gate3_fill_rate": null,
       "model": "M3_gbm_squared",
       "months_over_bias_threshold": [],
-      "wmape": 0.54334
+      "wmape": 0.542776532960461
     },
     {
-      "bias": -0.257856,
+      "bias": -0.25785549892182114,
       "excluded_reason": null,
       "gate1_pass": false,
       "gate2_rank": null,
@@ -105,7 +105,7 @@
         "2011-09",
         "2011-11"
       ],
-      "wmape": 0.501681
+      "wmape": 0.5016807467094637
     }
   ],
   "champion": "M2_gbm_poisson",
@@ -126,9 +126,9 @@
     "tie_wmape_points": 1.0
   },
   "gate1_all_failed": false,
-  "generated_at": "2026-08-17T14:38:11.889464+00:00",
-  "improvement_points": 3.1169000000000002,
+  "generated_at": "2026-08-24T19:04:38.343201+00:00",
+  "improvement_points": 3.1967035638444274,
   "meaningful_improvement": true,
   "rules_version": "PRD-v1.3-section20",
-  "run_id": "20260817T143811Z-85257f"
+  "run_id": "20260824T190154Z-ae08a3"
 }

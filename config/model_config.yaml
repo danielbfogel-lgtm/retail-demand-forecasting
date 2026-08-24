@@ -34,6 +34,12 @@ backtest:                               # §22 — rolling origins
   first_origin: "2010-05"
   last_origin: "2011-10"
 
+multi_horizon:                          # §32 — recursive months beyond the operational one
+  max_horizon: 3                        # 1 = the operational month itself; 3 reaches origin + 3
+  carry_forward_columns:                # panel columns held at their last observed value in a
+    - avg_unit_price                    # forecast month (no demand model predicts either of them;
+    - invoice_count                     # they feed avg_unit_price_lag_1 / invoice_count_lag_1)
+
 models:                                 # §19
   B1_last_month:
     kind: baseline

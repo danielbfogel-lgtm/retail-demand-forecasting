@@ -76,6 +76,21 @@ def load_latest_forecast() -> pd.DataFrame:
     return _read_csv(*_key(_require(paths.LATEST_FORECAST, "latest_forecast.csv")))
 
 
+def load_period_plan() -> pd.DataFrame:
+    """``period_plan.csv`` — the month and quarter stocking requirements (US-40).
+
+    One row per product per period: the hold-out months, the recursive forecast months, and the
+    calendar quarters built from them. Every number in it was computed by
+    :mod:`pipeline.multi_horizon`; the screen filters and displays, it never aggregates.
+    """
+    return _read_csv(*_key(_require(paths.PERIOD_PLAN, "period_plan.csv")))
+
+
+def load_multi_horizon_plan() -> pd.DataFrame:
+    """``multi_horizon_plan.csv`` — one row per product x horizon, with that horizon's own σ."""
+    return _read_csv(*_key(_require(paths.MULTI_HORIZON_PLAN, "multi_horizon_plan.csv")))
+
+
 def load_champion_decision() -> dict:
     return _read_json(*_key(_require(paths.CHAMPION_DECISION, "champion_decision.json")))
 

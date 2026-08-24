@@ -321,6 +321,25 @@ def build_features_for_origin(
     return _finalise(frame, cfg, include_target=False)
 
 
+def read_features(path: Path | None = None) -> pd.DataFrame:
+    """Read a written ``features.csv`` back, with the dtypes the rest of the pipeline expects.
+
+    The published file is the source of truth for every model fitted from it: it is written at
+    ``"%.6f"``, so a frame kept in memory is *not* the frame on disk, and a model trained on one
+    cannot reproduce predictions attributed to the other (:mod:`flow.steps` explains why the
+    difference matters more than its size suggests).
+    """
+    resolved = paths.FEATURES if path is None else path
+    if not resolved.is_file():
+        raise FileNotFoundError(
+            f"{resolved} not found. Run `python -m pipeline.features` first."
+        )
+    return pd.read_csv(
+        resolved,
+        dtype={"stock_code": "string", "forecast_origin": "string", "target_month": "string"},
+    )
+
+
 def write_features(frame: pd.DataFrame, ctx: RunContext) -> Path:
     """Write ``features.csv`` through ``ctx.out()`` and register it on the run.
 
