@@ -4,6 +4,11 @@ Reproducibility needs every dependency nailed to one exact version — a range l
 could quietly resolve to a different release on a different machine or a different day and change
 a result. This file checks ``requirements.txt`` uses ``==`` everywhere, and that the installed
 environment has no conflicting packages (``pip check``).
+
+The one line that is not a ``==`` pin is ``-e .``, the editable install of this project's own
+src-layout packages. It carries no version to pin — it is this working tree — and it is what makes
+Streamlit Community Cloud, which installs ``requirements.txt`` and nothing else, able to import
+``app`` and ``pipeline``. It is asserted for separately below.
 """
 
 from __future__ import annotations
@@ -19,6 +24,7 @@ from pipeline import paths
 
 REQUIREMENTS_FILE = paths.PROJECT_ROOT / "requirements.txt"
 _PIN_PATTERN = re.compile(r"^[A-Za-z0-9_.\-]+==[A-Za-z0-9_.\-]+$")
+_SELF_INSTALL = "-e ."  # this project, editable; no version exists to pin
 
 
 def _requirement_lines() -> list[str]:
@@ -36,8 +42,24 @@ def test_requirements_file_is_not_empty() -> None:
 
 
 def test_every_requirement_uses_double_equals_pin() -> None:
-    unpinned = [line for line in _requirement_lines() if not _PIN_PATTERN.match(line)]
+    unpinned = [
+        line
+        for line in _requirement_lines()
+        if line != _SELF_INSTALL and not _PIN_PATTERN.match(line)
+    ]
     assert unpinned == [], f"requirements.txt has non-== pin(s): {unpinned}"
+
+
+def test_requirements_installs_this_project_editable() -> None:
+    """``-e .`` is present and last.
+
+    Streamlit Community Cloud installs ``requirements.txt`` and runs nothing else, so without this
+    line the deployed app cannot import ``app`` or ``pipeline``. Last, so it resolves after the
+    pinned dependencies rather than dragging its own resolution in first.
+    """
+    lines = _requirement_lines()
+    assert _SELF_INSTALL in lines, f"requirements.txt is missing the {_SELF_INSTALL!r} line"
+    assert lines[-1] == _SELF_INSTALL, f"{_SELF_INSTALL!r} must be the last requirement line"
 
 
 def test_pip_check_passes() -> None:
